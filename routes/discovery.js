@@ -4,6 +4,15 @@ const DiscoveryV1 = require('ibm-watson/discovery/v1');
 const {IamAuthenticator} = require('ibm-watson/auth');
 const config = require('config');
 
+// base64変換後、文字列に変換
+let convert_base64_to_s = (x) => Buffer.from(x, "base64").toString("ascii");
+
+// Watson Discovery接続情報
+const API_KEY = convert_base64_to_s(process.env.API_KEY);
+const SERVICE_URL = convert_base64_to_s(process.env.SERVICE_URL);
+const ENVIRONMENT_ID = convert_base64_to_s(process.env.ENVIRONMENT_ID);
+const COLLECTION_ID = convert_base64_to_s(process.env.COLLECTION_ID);
+
 // eslint-disable-next-line new-cap
 const router = express.Router();
 
@@ -12,9 +21,9 @@ const router = express.Router();
 const discovery = new DiscoveryV1({
   version: config.get('watson.discovery.version'),
   authenticator: new IamAuthenticator({
-    apikey: config.get('watson.discovery.apikey'),
+    apikey: API_KEY,
   }),
-  serviceUrl: config.get('watson.discovery.serviceUrl'),
+  serviceUrl: SERVICE_URL,
 });
 
 const createQuery = (categoryLabel, searchStr) => {
@@ -26,8 +35,8 @@ const runQuery = async (categoryLabel, searchStr) => {
   const query = createQuery(categoryLabel, searchStr);
 
   const queryParams = {
-    environmentId: config.get('watson.discovery.environmentId'),
-    collectionId: config.get('watson.discovery.collectionId'),
+    environmentId: ENVIRONMENT_ID,
+    collectionId: COLLECTION_ID,
     highlight: true,
     query,
     _return: 'highlight',
@@ -62,7 +71,7 @@ router.post('/search', async (req, res) => {
       return;
     }
 
-    const responseText = await runQuery('/technology and computing/operating systems', req.body.searchText);
+    const responseText = await runQuery('/health and fitness/disease', req.body.searchText);
     res.json({
       responseText,
     });
@@ -73,3 +82,4 @@ router.post('/search', async (req, res) => {
 });
 
 module.exports = router;
+
