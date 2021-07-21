@@ -4,14 +4,11 @@ const DiscoveryV1 = require('ibm-watson/discovery/v1');
 const { IamAuthenticator } = require('ibm-watson/auth');
 const config = require('config');
 
-// base64変換後、文字列に変換
-let convert_base64_to_s = (x) => Buffer.from(x, "base64").toString("ascii");
-
 // Watson Discovery接続情報
-const API_KEY = convert_base64_to_s(process.env.API_KEY);
-const SERVICE_URL = convert_base64_to_s(process.env.SERVICE_URL);
-const ENVIRONMENT_ID = convert_base64_to_s(process.env.ENVIRONMENT_ID);
-const COLLECTION_ID = convert_base64_to_s(process.env.COLLECTION_ID);
+const API_KEY = process.env.API_KEY;
+const SERVICE_URL = process.env.SERVICE_URL;
+const ENVIRONMENT_ID = process.env.ENVIRONMENT_ID;
+const COLLECTION_ID = process.env.COLLECTION_ID;
 
 // eslint-disable-next-line new-cap
 const router = express.Router();
