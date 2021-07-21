@@ -1,7 +1,7 @@
 const express = require('express');
 
 const DiscoveryV1 = require('ibm-watson/discovery/v1');
-const {IamAuthenticator} = require('ibm-watson/auth');
+const { IamAuthenticator } = require('ibm-watson/auth');
 const config = require('config');
 
 // eslint-disable-next-line new-cap
@@ -41,8 +41,8 @@ const runQuery = async (categoryLabel, searchStr) => {
   console.log(JSON.stringify(results, null, '\t'));
   if (queryResponse.result.results && queryResponse.result.results.length > 0) {
     return queryResponse.result.results[0].highlight.text[0]
-        .replace(/<em>/g, '')
-        .replace(/<\/em>/g, '');
+      .replace(/<em>/g, '')
+      .replace(/<\/em>/g, '');
 
     // const textArray = queryResponse.result.results[0].highlight.text
     // const filtered = textArray.map((text) => {
@@ -62,7 +62,7 @@ router.post('/search', async (req, res) => {
       return;
     }
 
-    const responseText = await runQuery('/technology and computing/operating systems', req.body.searchText);
+    const responseText = await runQuery('/health and fitness/disease', req.body.searchText);
     res.json({
       responseText,
     });
