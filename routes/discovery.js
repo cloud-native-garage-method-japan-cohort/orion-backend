@@ -30,12 +30,13 @@ const createQuery = (categoryLabel, searchStr) => {
 
 const runQuery = async (categoryLabel, searchStr) => {
   const query = createQuery(categoryLabel, searchStr);
+  const naturalLanguageQuery = searchStr;
 
   const queryParams = {
     environmentId: ENVIRONMENT_ID,
     collectionId: COLLECTION_ID,
     highlight: true,
-    query,
+    naturalLanguageQuery,
     _return: 'highlight',
   };
 
