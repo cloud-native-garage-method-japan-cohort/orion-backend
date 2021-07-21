@@ -71,7 +71,7 @@ router.post('/search', async (req, res) => {
       return;
     }
 
-    const responseText = await runQuery('/health and fitness/disease', req.body.searchText);
+    const responseText = await runQuery('/technology and computing/operating systems', req.body.searchText);
     res.json({
       responseText,
     });
