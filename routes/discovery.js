@@ -1,8 +1,14 @@
 const express = require('express');
 
 const DiscoveryV1 = require('ibm-watson/discovery/v1');
-const {IamAuthenticator} = require('ibm-watson/auth');
+const { IamAuthenticator } = require('ibm-watson/auth');
 const config = require('config');
+
+// Watson Discovery接続情報
+const API_KEY = process.env.API_KEY.trim();
+const SERVICE_URL = process.env.SERVICE_URL.trim();
+const ENVIRONMENT_ID = process.env.ENVIRONMENT_ID.trim();
+const COLLECTION_ID = process.env.COLLECTION_ID.trim();
 
 // eslint-disable-next-line new-cap
 const router = express.Router();
@@ -12,9 +18,9 @@ const router = express.Router();
 const discovery = new DiscoveryV1({
   version: config.get('watson.discovery.version'),
   authenticator: new IamAuthenticator({
-    apikey: config.get('watson.discovery.apikey'),
+    apikey: API_KEY,
   }),
-  serviceUrl: config.get('watson.discovery.serviceUrl'),
+  serviceUrl: SERVICE_URL,
 });
 
 const createQuery = (categoryLabel, searchStr) => {
@@ -24,12 +30,13 @@ const createQuery = (categoryLabel, searchStr) => {
 
 const runQuery = async (categoryLabel, searchStr) => {
   const query = createQuery(categoryLabel, searchStr);
+  const naturalLanguageQuery = searchStr;
 
   const queryParams = {
-    environmentId: config.get('watson.discovery.environmentId'),
-    collectionId: config.get('watson.discovery.collectionId'),
+    environmentId: ENVIRONMENT_ID,
+    collectionId: COLLECTION_ID,
     highlight: true,
-    query,
+    naturalLanguageQuery,
     _return: 'highlight',
   };
 
@@ -41,8 +48,8 @@ const runQuery = async (categoryLabel, searchStr) => {
   console.log(JSON.stringify(results, null, '\t'));
   if (queryResponse.result.results && queryResponse.result.results.length > 0) {
     return queryResponse.result.results[0].highlight.text[0]
-        .replace(/<em>/g, '')
-        .replace(/<\/em>/g, '');
+      .replace(/<em>/g, '')
+      .replace(/<\/em>/g, '');
 
     // const textArray = queryResponse.result.results[0].highlight.text
     // const filtered = textArray.map((text) => {
