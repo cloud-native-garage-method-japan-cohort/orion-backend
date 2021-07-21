@@ -5,10 +5,10 @@ const { IamAuthenticator } = require('ibm-watson/auth');
 const config = require('config');
 
 // Watson Discovery接続情報
-const API_KEY = process.env.API_KEY;
-const SERVICE_URL = process.env.SERVICE_URL;
-const ENVIRONMENT_ID = process.env.ENVIRONMENT_ID;
-const COLLECTION_ID = process.env.COLLECTION_ID;
+const API_KEY = process.env.API_KEY.trim();
+const SERVICE_URL = process.env.SERVICE_URL.trim();
+const ENVIRONMENT_ID = process.env.ENVIRONMENT_ID.trim();
+const COLLECTION_ID = process.env.COLLECTION_ID.trim();
 
 // eslint-disable-next-line new-cap
 const router = express.Router();
